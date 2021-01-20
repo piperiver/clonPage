@@ -196,7 +196,7 @@
           alert('Ocurrio un error, diligencie todos los campos con asterisco(*)');
           return false;
         }
-        document.getElementById('resumen').text = `Consultando en: ${ url }`;
+        document.getElementById('resumen').innerHTML = `Consultando en: ${ url }`;
         document.getElementById('iframeMapa').src = url;
         $('#modalMapa').modal({show: true});
       }
