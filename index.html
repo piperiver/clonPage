@@ -67,11 +67,11 @@
         <div>
           <div class="mb-3">
             <label for="origin" class="form-label">Origen</label>
-            <input type="text" class="form-control" onkeyup="setOrigin(this)" id="origin">
+            <input type="text" class="form-control" onkeyup="setOrigin(this)" id="origin" value="pak-1-hugo-boss">
           </div>
           <div class="mb-3">
             <label for="destination" class="form-label">Destino</label>
-            <input type="text" class="form-control" id="destination" onkeyup="setDestination(this)">
+            <input type="text" class="form-control" id="destination" onkeyup="setDestination(this)" value="S171">
           </div>
           <div>
             <label class="form-label">Ambiente</label>
@@ -90,7 +90,6 @@
           type="button"
           class="btn btn-primary mt-5"
           id="buttonMap"
-          disabled
           onClick="showMap()"
         >
           Abrir Mapa Desarrollo
@@ -175,7 +174,7 @@
 
       function activeButton(){
         if(origin === '' ||  urlBase === ''){
-          document.getElementById('buttonMap').disabled = true;
+          document.getElementById('buttonMap').disabled = false;
         }else{
           document.getElementById('buttonMap').disabled = false;
         }
