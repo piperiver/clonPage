@@ -20,57 +20,104 @@
     </script> -->
   </head>
   <body>
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
+    
+     <!-- Modal Produccion -->
+     <div
+     class="modal fade"
+     id="modalMapa"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true"
+   >
+     <div class="modal-dialog modal-lg" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="exampleModalLabel">Mapa</h5>
+           <button
+             type="button"
+             class="close"
+             data-dismiss="modal"
+             aria-label="Close"
+           >
+             <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+         <div class="modal-body">
 
-            <iframe src="https://map-dev.parauco.com/pak-1-hugo-boss/S449" style="width: 100%; height: 500px"></iframe>
+           <iframe id="iframeMapa" style="width: 100%; height: 500px"></iframe>
+           <!-- <iframe src="https://map-dev.parauco.com/pak-1-hugo-boss/S449" style="width: 100%; height: 500px"></iframe> -->
 
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
+         </div>
+         <div class="modal-footer">
+           <button
+             type="button"
+             class="btn btn-secondary"
+             data-dismiss="modal"
+           >
+             Cerrar
+           </button>
+         </div>
+       </div>
+     </div>
+   </div>
+
     <div class="container">
       <div class="mt-5">
+        <div>
+          <div class="mb-3">
+            <label for="origin" class="form-label">Origen</label>
+            <input type="text" class="form-control" onkeyup="setOrigin(this)" id="origin">
+          </div>
+          <div class="mb-3">
+            <label for="destination" class="form-label">Destino</label>
+            <input type="text" class="form-control" id="destination" onkeyup="setDestination(this)">
+          </div>
+          <div>
+            <label class="form-label">Ambiente</label>
+            <select class="custom-select" onchange="setPath(this)">
+              <option selected>Seleccione una opción</option>
+              <option value="dev">Desarrollo</option>
+              <option value="qa">QA</option>
+              <option value="uat">UAT</option>
+              <option value="prod">Producción</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Button trigger modal -->
         <button
           type="button"
-          class="btn btn-primary"
-          data-toggle="modal"
-          data-target="#exampleModal"
+          class="btn btn-primary mt-5"
+          id="buttonMap"
+          disabled
+          onClick="showMap()"
         >
-          Launch demo modal
+          Abrir Mapa Desarrollo
         </button>
+
+        <div class="row">
+          <div class="col-md-12">
+            <h3 class="mt-5">Sugerencias</h3>
+          </div>
+          <div class="col-md-6">
+            <p>Origen</p>
+            <ul>
+              <li>pak-1-hugo-boss</li>
+              <li>PA22</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <p>Destino</p>
+            <ul>
+              <li>S449 (Borra Chalaca)</li>
+              <li>S500 (Zara)</li>
+              <li>S214B (Adidas)</li>
+              <li>S171 (Diesel)</li>
+            </ul>
+          </div>
+        </div>
+
       </div>
     </div>
     <script
@@ -88,5 +135,72 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script>
+      let origin = '';
+      let destination = '';
+      let urlBase = '';
+
+      function setOrigin(e){
+        origin = e.value;
+        activeButton();
+      }
+
+      function setDestination(e){
+        destination = e.value;
+        activeButton();
+      }
+
+      function setPath(e){
+        switch (e.value) {
+          case 'dev':
+            urlBase = 'https://map-dev.parauco.com';
+            break;
+          case 'qa':
+            urlBase = 'https://map-qa.parauco.com';
+            break;
+          case 'uat':
+            urlBase = 'https://map-uat.parauco.com';
+            break;
+          case 'prod':
+            urlBase = 'https://map-prod.parauco.com';
+            break;
+        
+          default:
+            urlBase = 'https://map-dev.parauco.com';
+            break;
+        }
+
+        activeButton();
+      }
+
+      function activeButton(){
+        if(origin === '' ||  urlBase === ''){
+          document.getElementById('buttonMap').disabled = true;
+        }else{
+          document.getElementById('buttonMap').disabled = false;
+        }
+      }
+
+      function showMap(){
+        let url = '';
+        
+        if($.trim(origin).length > 0){
+          url = `${ urlBase }/${ origin }`;
+        }
+
+        if($.trim(destination).length > 0){
+          url+= `/${ destination }`;
+        }
+
+        if(url === ''){
+          alert('Ocurrio un error, diligencie todos los campos con asterisco(*)');
+          return false;
+        }
+
+        document.getElementById('iframeMapa').src = url;
+        $('#modalMapa').modal({show: true});
+      }
+
+    </script>
   </body>
 </html>
