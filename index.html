@@ -47,7 +47,7 @@
 
            <iframe id="iframeMapa" style="width: 100%; height: 500px"></iframe>
            <!-- <iframe src="https://map-dev.parauco.com/pak-1-hugo-boss/S449" style="width: 100%; height: 500px"></iframe> -->
-
+            <p id="resumen"></p>
          </div>
          <div class="modal-footer">
            <button
@@ -162,7 +162,7 @@
             urlBase = 'https://map-uat.parauco.com';
             break;
           case 'prod':
-            urlBase = 'https://map-prod.parauco.com';
+            urlBase = 'https://map.parauco.com';
             break;
         
           default:
@@ -196,7 +196,7 @@
           alert('Ocurrio un error, diligencie todos los campos con asterisco(*)');
           return false;
         }
-
+        document.getElementById('resumen').text = `Consultando en: ${ url }`;
         document.getElementById('iframeMapa').src = url;
         $('#modalMapa').modal({show: true});
       }
