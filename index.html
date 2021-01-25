@@ -76,6 +76,7 @@
             <label class="form-label">Ambiente</label>
             <select class="custom-select" onchange="setPath(this)">
               <option selected>Seleccione una opción</option>
+              <option value="local">Localhost</option>
               <option value="dev">Desarrollo</option>
               <option value="qa">QA</option>
               <option value="uat">UAT</option>
@@ -136,7 +137,7 @@
     <script>
       let origin = 'pak-1-hugo-boss';
       let destination = 'S171';
-      let urlBase = 'http://localhost:3002';
+      let urlBase = '';
 
       function setOrigin(e){
         origin = e.value;
@@ -150,6 +151,9 @@
 
       function setPath(e){
         switch (e.value) {
+          case 'local':
+            urlBase = 'http://localhost:3002';
+            break;
           case 'dev':
             urlBase = 'https://map-dev.parauco.com';
             break;
@@ -179,6 +183,11 @@
       }
 
       function showMap(){
+        if(urlBase === ''){
+          alert("Seleccione un ambiente de la lista");
+          return false;
+        }
+
         let url = '';
         
         if($.trim(origin).length > 0){
